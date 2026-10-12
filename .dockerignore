@@ -16,6 +16,15 @@ coverage
 
 # cache
 .cache
+.venv
 
-# personal env
+# personal env / local secrets
 .env
+.env.local
+.env.production
+.env.*.local
+
+# CI / editor
+.github
+.vscode
+.idea
