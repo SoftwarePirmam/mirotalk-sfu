@@ -22,26 +22,49 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     needs: test
+    # Docker Hub push is optional. Coolify builds from this Dockerfile and
+    # does not require DOCKERHUB_* secrets.
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_ACCESS_TOKEN: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+      - name: Decide push target
+        id: docker
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_ACCESS_TOKEN" ]; then
+            echo "push=true" >> "$GITHUB_OUTPUT"
+            echo "tags=${DOCKERHUB_USERNAME}/sfu:latest" >> "$GITHUB_OUTPUT"
+            echo "platforms=linux/amd64,linux/arm64" >> "$GITHUB_OUTPUT"
+          else
+            echo "push=false" >> "$GITHUB_OUTPUT"
+            echo "tags=mirotalk-sfu:ci" >> "$GITHUB_OUTPUT"
+            # Multi-arch without push cannot be loaded into Docker; validate amd64 only.
+            echo "platforms=linux/amd64" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: docker/setup-qemu-action@v3
+        if: steps.docker.outputs.push == 'true'
 
       - uses: docker/setup-buildx-action@v3
 
-      - name: Build & Push
+      - name: Log in to Docker Hub
+        if: steps.docker.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_ACCESS_TOKEN }}
+
+      - name: Build Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: mirotalk/sfu:latest
+          platforms: ${{ steps.docker.outputs.platforms }}
+          push: ${{ steps.docker.outputs.push }}
+          load: ${{ steps.docker.outputs.push != 'true' }}
+          tags: ${{ steps.docker.outputs.tags }}
           cache-from: type=gha,scope=mirotalksfu
           cache-to: type=gha,mode=max,scope=mirotalksfu
