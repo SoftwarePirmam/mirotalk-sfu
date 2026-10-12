@@ -18,7 +18,9 @@ __pycache__/
 # personal
 .env
 config.js
-docker-compose.yml
+# Coolify production compose is tracked; keep local-only variants ignored:
+# docker-compose.yml
+docker-compose.override.yml
 docker-push.sh
 data
 rec

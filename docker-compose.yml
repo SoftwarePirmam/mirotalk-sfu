@@ -1,0 +1,87 @@
+# MiroTalk SFU — Coolify / Traefik production compose
+#
+# HTTP/WebSocket signaling → Traefik (HTTPS on 443)
+# WebRTC media (UDP/TCP)   → published directly on the host (NOT proxied)
+#
+# In Coolify: create a Docker Compose resource, set the domain on this service
+# to port 8080, and enable HTTPS. See docs/COOLIFY.md.
+
+services:
+  mirotalksfu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: mirotalk/sfu:coolify
+    restart: unless-stopped
+    # Do not set container_name — Coolify assigns unique names per deployment.
+
+    environment:
+      NODE_ENV: production
+      SERVER_LISTEN_IP: ${SERVER_LISTEN_IP:-0.0.0.0}
+      SERVER_LISTEN_PORT: ${SERVER_LISTEN_PORT:-8080}
+      # Public HTTPS URL (your Coolify domain), e.g. https://meet.example.com
+      SERVER_HOST_URL: ${SERVER_HOST_URL}
+      # Required behind Coolify Traefik
+      TRUST_PROXY: ${TRUST_PROXY:-true}
+      # Public IPv4 of the Coolify server (NOT a Docker/LAN IP)
+      SFU_ANNOUNCED_IP: ${SFU_ANNOUNCED_IP}
+      SFU_LISTEN_IP: ${SFU_LISTEN_IP:-0.0.0.0}
+      SFU_MIN_PORT: ${SFU_MIN_PORT:-40000}
+      SFU_MAX_PORT: ${SFU_MAX_PORT:-40100}
+      SFU_NUM_WORKERS: ${SFU_NUM_WORKERS:-}
+      SFU_SERVER: ${SFU_SERVER:-false}
+      JWT_SECRET: ${JWT_SECRET}
+      API_KEY_SECRET: ${API_KEY_SECRET}
+      HOST_PROTECTED: ${HOST_PROTECTED:-false}
+      HOST_USER_AUTH: ${HOST_USER_AUTH:-false}
+      HOST_USERS: ${HOST_USERS:-}
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+
+    # Traefik (Coolify proxy) reaches the app on this internal port.
+    # Assign your domain to port 8080 in the Coolify UI.
+    expose:
+      - "8080"
+
+    # WebRTC media must hit the host directly — Traefik does not proxy UDP media.
+    # Keep this range in sync with SFU_MIN_PORT / SFU_MAX_PORT.
+    ports:
+      - "40000-40100:40000-40100/udp"
+      - "40000-40100:40000-40100/tcp"
+
+    # Optional Traefik hints. Coolify usually injects Host/TLS labels from the
+    # Domain field; keep the service port explicit so routing stays stable.
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.mirotalksfu.loadbalancer.server.port=8080
+      # WebSockets (Socket.IO) work over Traefik HTTP by default — no extra middleware.
+      # If you manage labels manually instead of via Coolify Domains, uncomment and edit:
+      # - traefik.http.routers.mirotalksfu.rule=Host(`meet.example.com`)
+      # - traefik.http.routers.mirotalksfu.entrypoints=https
+      # - traefik.http.routers.mirotalksfu.tls=true
+      # - traefik.http.routers.mirotalksfu.tls.certresolver=letsencrypt
+      # - traefik.http.routers.mirotalksfu-http.rule=Host(`meet.example.com`)
+      # - traefik.http.routers.mirotalksfu-http.entrypoints=http
+      # - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+      # - traefik.http.routers.mirotalksfu-http.middlewares=redirect-to-https
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:8080/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # Optional persistent volumes (enable matching features in env first)
+    # volumes:
+    #   - mirotalk-recordings:/src/app/rec
+    #   - mirotalk-rtmp:/src/app/rtmp
+
+# volumes:
+#   mirotalk-recordings:
+#   mirotalk-rtmp:
