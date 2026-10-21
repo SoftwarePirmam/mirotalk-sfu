@@ -35,6 +35,15 @@ services:
       HOST_PROTECTED: ${HOST_PROTECTED:-false}
       HOST_USER_AUTH: ${HOST_USER_AUTH:-false}
       HOST_USERS: ${HOST_USERS:-}
+      # false = only token presenters (AdvanceSchool staff) get host controls; guests never auto-promote
+      PRESENTER_JOIN_FIRST: ${PRESENTER_JOIN_FIRST:-false}
+      PRESENTERS: ${PRESENTERS:-}
+      # Recording is off for everyone unless explicitly enabled
+      SHOW_RECORDING_TAB: ${SHOW_RECORDING_TAB:-false}
+      SURVEY_ENABLED: ${SURVEY_ENABLED:-false}
+      # After leaving, send people here instead of the MiroTalk landing page (e.g. https://laravel.hewa.co/appointments)
+      REDIRECT_ENABLED: ${REDIRECT_ENABLED:-false}
+      REDIRECT_URL: ${REDIRECT_URL:-}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
 
     # Traefik (Coolify proxy) reaches the app on this internal port.

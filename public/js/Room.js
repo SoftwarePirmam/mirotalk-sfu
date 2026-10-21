@@ -4944,7 +4944,7 @@ function handleRoomClientEvents() {
         }
     });
     rc.on(RoomClient.EVENTS.hostOnlyRecordingOff, () => {
-        if (isRulesActive && !isPresenter) {
+        if (isRulesActive && !isPresenter && BUTTONS.settings.tabRecording) {
             console.log('Room event: host only recording disabled');
             show(startRecButton);
             show(recordingActionButton);

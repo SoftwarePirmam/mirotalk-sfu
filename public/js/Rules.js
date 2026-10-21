@@ -190,8 +190,13 @@ function handleRules(isPresenter, roomSetup = true) {
         // BUTTONS.consumerVideo.drawingButton = false;
         // BUTTONS.producerVideo.drawingButton = false;
         BUTTONS.whiteboard.whiteboardLockButton = false;
+        BUTTONS.settings.tabRecording = false;
+        BUTTONS.main.settingsButton = false;
 
         // Hide presenter-only elements (covers demotion from presenter to guest)
+        hide(settingsButton);
+        hide(tabRecordingBtn);
+        hide(startRecButton);
         hide(editorUnlockBtn);
         hide(transcriptionAllLi);
         hide(breakoutRoomButton);
@@ -224,6 +229,11 @@ function handleRules(isPresenter, roomSetup = true) {
 
         show(editorUnlockBtn);
         show(transcriptionAllLi);
+        BUTTONS.main.settingsButton && show(settingsButton);
+        if (BUTTONS.settings.tabRecording) {
+            show(tabRecordingBtn);
+            show(startRecButton);
+        }
 
         BUTTONS.main.breakoutRoomButton && show(breakoutRoomButton);
         //...
