@@ -1,6 +1,6 @@
 'use strict';
 
-const brandDataKey = 'brandData';
+const brandDataKey = 'meetflowBrandData';
 const brandData = window.sessionStorage.getItem(brandDataKey);
 
 const title = document.getElementById('title');
@@ -69,16 +69,16 @@ let BRAND = {
             'webrtc, miro, mediasoup, mediasoup-client, self hosted, voip, sip, real-time communications, chat, messaging, meet, webrtc stun, webrtc turn, webrtc p2p, webrtc sfu, video meeting, video chat, video conference, multi video chat, multi video conference, peer to peer, p2p, sfu, rtc, alternative to, zoom, microsoft teams, google meet, jitsi, meeting',
     },
     html: {
-        topSponsors: true,
-        features: true,
-        teams: true,
-        tryEasier: true,
-        poweredBy: true,
-        sponsors: true,
-        pastSponsors: true,
-        advertisers: true,
-        supportUs: true,
-        footer: true,
+        topSponsors: false,
+        features: false,
+        teams: false,
+        tryEasier: false,
+        poweredBy: false,
+        sponsors: false,
+        pastSponsors: false,
+        advertisers: false,
+        supportUs: false,
+        footer: false,
     },
     whoAreYou: {
         title: 'MiroTalk SFU - Waiting for host to start the meeting',
@@ -249,23 +249,30 @@ function mergeBrand(current, updated) {
     return current;
 }
 
-// BRAND check
+// BRAND check — hide MeetFlow marketing sections unless explicitly enabled
 function checkBrand() {
-    !BRAND.html.topSponsors && elementDisplay(topSponsors, false);
-    !BRAND.html.features && elementDisplay(features, false);
-    !BRAND.html.teams && elementDisplay(teams, false);
-    !BRAND.html.tryEasier && elementDisplay(tryEasier, false);
-    !BRAND.html.poweredBy && elementDisplay(poweredBy, false);
-    !BRAND.html.sponsors && elementDisplay(sponsors, false);
-    !BRAND.html.pastSponsors && elementDisplay(pastSponsors, false);
-    !BRAND.html.advertisers && elementDisplay(advertisers, false);
-    !BRAND.html.supportUs && elementDisplay(supportUs, false);
-    !BRAND.html.footer && elementDisplay(footer, false);
+    setSectionVisible(topSponsors, !!BRAND.html?.topSponsors);
+    setSectionVisible(features, !!BRAND.html?.features);
+    setSectionVisible(teams, !!BRAND.html?.teams);
+    setSectionVisible(tryEasier, !!BRAND.html?.tryEasier);
+    setSectionVisible(poweredBy, !!BRAND.html?.poweredBy);
+    setSectionVisible(sponsors, !!BRAND.html?.sponsors);
+    setSectionVisible(pastSponsors, !!BRAND.html?.pastSponsors);
+    setSectionVisible(advertisers, !!BRAND.html?.advertisers);
+    setSectionVisible(supportUs, !!BRAND.html?.supportUs);
+    setSectionVisible(footer, !!BRAND.html?.footer);
+}
+
+function setSectionVisible(element, visible) {
+    if (!element) return;
+    element.hidden = !visible;
+    element.style.display = visible ? 'block' : 'none';
 }
 
 // ELEMENT display mode
 function elementDisplay(element, display, mode = 'block') {
     if (!element) return;
+    element.hidden = !display;
     element.style.display = display ? mode : 'none';
 }
 
