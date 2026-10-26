@@ -11,9 +11,9 @@ const {
     requireAuth,
 } = require('./session');
 
-function createMeetflowRouter({ db, config, roomList }) {
+function createSyncroomRouter({ db, config, roomList }) {
     const router = express.Router();
-    const mf = config?.ui?.brand?.meetflow || {};
+    const mf = config?.ui?.brand?.syncroom || {};
     const sessionDays = mf.sessionDays || 14;
 
     router.get('/auth/me', (req, res) => {
@@ -62,7 +62,7 @@ function createMeetflowRouter({ db, config, roomList }) {
     router.get('/meetings', requireAuth, (req, res) => {
         try {
             const { from, to } = req.query || {};
-            const list = meetings.listByOwner(db, req.meetflowUser.id, { from, to });
+            const list = meetings.listByOwner(db, req.syncroomUser.id, { from, to });
             res.json({ meetings: list });
         } catch (err) {
             res.status(err.status || 500).json({ message: err.message || 'Failed to list meetings' });
@@ -71,7 +71,7 @@ function createMeetflowRouter({ db, config, roomList }) {
 
     router.get('/meetings/upcoming', requireAuth, (req, res) => {
         try {
-            const list = meetings.upcomingForOwner(db, req.meetflowUser.id, 8);
+            const list = meetings.upcomingForOwner(db, req.syncroomUser.id, 8);
             res.json({ meetings: list });
         } catch (err) {
             res.status(err.status || 500).json({ message: err.message || 'Failed to list upcoming meetings' });
@@ -80,7 +80,7 @@ function createMeetflowRouter({ db, config, roomList }) {
 
     router.post('/meetings', requireAuth, (req, res) => {
         try {
-            const meeting = meetings.createMeeting(db, req.meetflowUser.id, req.body || {});
+            const meeting = meetings.createMeeting(db, req.syncroomUser.id, req.body || {});
             res.status(201).json({ meeting });
         } catch (err) {
             res.status(err.status || 500).json({ message: err.message || 'Failed to create meeting' });
@@ -90,7 +90,7 @@ function createMeetflowRouter({ db, config, roomList }) {
     router.post('/meetings/instant', requireAuth, (req, res) => {
         try {
             const title = (req.body && req.body.title) || 'Instant meeting';
-            const meeting = meetings.createMeeting(db, req.meetflowUser.id, {
+            const meeting = meetings.createMeeting(db, req.syncroomUser.id, {
                 title,
                 startsAt: new Date().toISOString(),
                 durationMinutes: 60,
@@ -105,7 +105,7 @@ function createMeetflowRouter({ db, config, roomList }) {
 
     router.get('/meetings/:id', requireAuth, (req, res) => {
         try {
-            const meeting = meetings.getById(db, Number(req.params.id), req.meetflowUser.id);
+            const meeting = meetings.getById(db, Number(req.params.id), req.syncroomUser.id);
             if (!meeting) return res.status(404).json({ message: 'Meeting not found' });
             res.json({ meeting });
         } catch (err) {
@@ -115,7 +115,7 @@ function createMeetflowRouter({ db, config, roomList }) {
 
     router.patch('/meetings/:id', requireAuth, (req, res) => {
         try {
-            const meeting = meetings.updateMeeting(db, Number(req.params.id), req.meetflowUser.id, req.body || {});
+            const meeting = meetings.updateMeeting(db, Number(req.params.id), req.syncroomUser.id, req.body || {});
             res.json({ meeting });
         } catch (err) {
             res.status(err.status || 500).json({ message: err.message || 'Failed to update meeting' });
@@ -124,7 +124,7 @@ function createMeetflowRouter({ db, config, roomList }) {
 
     router.delete('/meetings/:id', requireAuth, (req, res) => {
         try {
-            meetings.deleteMeeting(db, Number(req.params.id), req.meetflowUser.id);
+            meetings.deleteMeeting(db, Number(req.params.id), req.syncroomUser.id);
             res.json({ ok: true });
         } catch (err) {
             res.status(err.status || 500).json({ message: err.message || 'Failed to delete meeting' });
@@ -150,4 +150,4 @@ function createMeetflowRouter({ db, config, roomList }) {
     return router;
 }
 
-module.exports = { createMeetflowRouter };
+module.exports = { createSyncroomRouter };

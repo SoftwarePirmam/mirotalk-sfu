@@ -9,7 +9,7 @@ let db = null;
 function getDb(dbPath) {
     if (db) return db;
 
-    const resolved = path.resolve(dbPath || './data/meetflow.db');
+    const resolved = path.resolve(dbPath || './data/syncroom.db');
     fs.mkdirSync(path.dirname(resolved), { recursive: true });
 
     db = new DatabaseSync(resolved);

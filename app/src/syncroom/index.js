@@ -1,22 +1,22 @@
 'use strict';
 
 const Logger = require('../Logger');
-const log = new Logger('MeetFlow');
+const log = new Logger('Syncroom');
 const { getDb } = require('./db');
 const users = require('./users');
-const { createMeetflowRouter } = require('./routes');
+const { createSyncroomRouter } = require('./routes');
 const { requireAuthPage, getSessionUser } = require('./session');
 
-function initMeetflow({ app, config, views, htmlInjector, roomList }) {
-    const mf = config?.ui?.brand?.meetflow;
+function initSyncroom({ app, config, views, htmlInjector, roomList }) {
+    const mf = config?.ui?.brand?.syncroom;
     if (!mf || mf.enabled === false) {
-        log.info('MeetFlow app layer disabled');
+        log.info('Syncroom app layer disabled');
         return { enabled: false };
     }
 
     const db = getDb(mf.dbPath);
 
-    app.use('/api/app', createMeetflowRouter({ db, config, roomList }));
+    app.use('/api/app', createSyncroomRouter({ db, config, roomList }));
 
     app.get('/dashboard', requireAuthPage, (req, res) => {
         if (htmlInjector && views.dashboard) {
@@ -27,7 +27,7 @@ function initMeetflow({ app, config, views, htmlInjector, roomList }) {
     });
 
     app.get('/register', (req, res) => {
-        // Registration disabled for now â€” only seeded/admin accounts
+        // Registration disabled for now — only seeded/admin accounts
         if (!mf.allowRegister) {
             return res.redirect('/login');
         }
@@ -47,14 +47,14 @@ function initMeetflow({ app, config, views, htmlInjector, roomList }) {
             displayName: mf.adminName,
         })
         .then((seeded) => {
-            if (seeded) log.info('Seeded MeetFlow admin user', { email: seeded.email });
+            if (seeded) log.info('Seeded Syncroom admin user', { email: seeded.email });
         })
         .catch((err) => {
-            log.error('Failed to seed MeetFlow admin', err.message);
+            log.error('Failed to seed Syncroom admin', err.message);
         });
 
-    log.info('MeetFlow app layer ready', { dbPath: mf.dbPath });
+    log.info('Syncroom app layer ready', { dbPath: mf.dbPath });
     return { enabled: true, db };
 }
 
-module.exports = { initMeetflow, getSessionUser, requireAuthPage };
+module.exports = { initSyncroom, getSessionUser, requireAuthPage };

@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en" class="no-js">
     <head>
         <!-- Title and Icon -->
 
-        <title id="title">MeetFlow - Video Meetings</title>
+        <title id="title">Syncroom - Video Meetings</title>
         <link id="icon" rel="shortcut icon" href="../images/logo.svg" />
         <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/logo.svg" />
 
@@ -34,91 +34,58 @@
 
         <!-- StyleSheet -->
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="../css/landing.css" />
+        <link rel="stylesheet" type="text/css" href="../css/Syncroom.css" />
         <link rel="stylesheet" href="../css/Swal.css" />
 
-        <!-- Snow effects -->
-
-        <link rel="stylesheet" href="../css/Snow.css" />
-        <script async src="../js/Snow.js"></script>
-
         <!-- Js scripts -->
-        <script defer src="../js/Widget.js"></script>
         <script defer src="../js/Brand.js"></script>
-        <script async src="../js/Stats.js"></script>
-
         <script defer src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.8"></script>
         <script defer src="../js/Swal.js"></script>
-        <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
-        <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
     </head>
-    <body class="is-boxed has-animations">
-        <div id="snow-container"></div>
+    <body class="is-boxed">
         <div class="body-wrap">
             <header class="site-header">
                 <div class="container">
                     <div class="site-header-inner">
-                        <div class="brand header-brand">
-                            <div class="m-0">
-                                <a href="/">
-                                    <img
-                                        class="header-logo-image"
-                                        src="../images/logo.svg"
-                                        alt="MeetFlow"
-                                    />
-                                    <!-- <img
-                                        class="header-logo-image reveal-from-left"
-                                        src="../images/mirotalk-mc.png"
-                                        alt="MeetFlow"
-                                        width="96"
-                                        height="auto"
-                                    /> -->
-                                </a>
-                            </div>
-                        </div>
+                        <a class="mf-brand-lockup" href="/">
+                            <img class="header-logo-image" src="../images/logo.svg" alt="Syncroom" />
+                            <strong>Syncroom</strong>
+                        </a>
+                        <a id="syncroomHeaderSignIn" class="button button-secondary br-6" href="/login">Sign in</a>
                     </div>
                 </div>
             </header>
 
             <main>
-                <section class="hero reveal-from-bottom">
+                <section class="mf-hero">
                     <div class="container">
-                        <div class="hero-inner">
-                            <div class="hero-copy">
-                                <h1 id="appTitle" class="hero-title mt-0">
-                                    MeetFlow<br />Secure video meetings.<br />
-                                    Schedule, join, collaborate.
-                                </h1>
-                                <p id="appDescription" class="hero-paragraph">
-                                    Sign in to create meetings, manage your calendar, and start secure video rooms.
-                                </p>
-                                <div class="mt-24" style="display: flex; gap: 12px; flex-wrap: wrap">
-                                    <a id="meetflowSignInBtn" class="button button-primary br-6" href="/login"
-                                        >Sign in</a
-                                    >
-                                    <a id="meetflowDashboardBtn" class="button button-secondary br-6" href="/dashboard"
-                                        >Open dashboard</a
-                                    >
-                                </div>
+                        <div class="mf-hero-inner">
+                            <div class="mf-kicker">Business video meetings</div>
+                            <h1 id="appTitle" class="hero-title mt-0">
+                                Syncroom
+                            </h1>
+                            <p id="appDescription" class="hero-paragraph">
+                                A professional workspace for scheduling meetings, managing your calendar, and hosting secure video rooms.
+                            </p>
+                            <div class="mf-cta-row">
+                                <a id="syncroomSignInBtn" class="button button-primary" href="/login">Sign in</a>
                             </div>
-                            <div class="hero-figure anime-element">
-                                <svg class="placeholder" width="528" height="396" viewBox="0 0 528 396">
-                                    <rect width="528" height="396" style="fill: transparent" />
-                                </svg>
-                                <div class="hero-figure-box hero-figure-box-01" data-rotation="45deg"></div>
-                                <div class="hero-figure-box hero-figure-box-02" data-rotation="-45deg"></div>
-                                <div class="hero-figure-box hero-figure-box-03" data-rotation="0deg"></div>
-                                <div class="hero-figure-box hero-figure-box-04" data-rotation="-135deg"></div>
-                                <div class="hero-figure-box hero-figure-box-05"></div>
-                                <div class="hero-figure-box hero-figure-box-06"></div>
-                                <div class="hero-figure-box hero-figure-box-07"></div>
-                                <div class="hero-figure-box hero-figure-box-08" data-rotation="-22deg"></div>
-                                <div class="hero-figure-box hero-figure-box-09" data-rotation="-52deg"></div>
-                                <div class="hero-figure-box hero-figure-box-10" data-rotation="-50deg"></div>
+                            <div class="mf-panel" aria-hidden="true">
+                                <div>
+                                    <strong>Schedule</strong>
+                                    <span>Plan meetings with dates, duration, and join links.</span>
+                                </div>
+                                <div>
+                                    <strong>Host</strong>
+                                    <span>Start instant rooms from your private dashboard.</span>
+                                </div>
+                                <div>
+                                    <strong>Secure</strong>
+                                    <span>Account-only creation. Guests join by invite link.</span>
+                                </div>
                             </div>
                         </div>
                     </div>

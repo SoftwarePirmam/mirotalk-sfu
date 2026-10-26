@@ -1,11 +1,11 @@
 'use strict';
 
 /*
-â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€ â–ˆâ–ˆâ€   â–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€ 
-â–ˆâ–ˆâ€â€â€â€â€â€â–ˆâ–ˆâ€â€â€â€â€â€â–ˆâ–ˆâ€â€â€â–ˆâ–ˆâ€â–ˆâ–ˆâ€   â–ˆâ–ˆâ€â–ˆâ–ˆâ€â€â€â€â€â€â–ˆâ–ˆâ€â€â€â–ˆâ–ˆâ€
-â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â€â–ˆâ–ˆâ€   â–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â€
-â€â€â€â€â€â–ˆâ–ˆâ€â–ˆâ–ˆâ€â€â€â€  â–ˆâ–ˆâ€â€â€â–ˆâ–ˆâ€â€â–ˆâ–ˆâ€ â–ˆâ–ˆâ€â€â–ˆâ–ˆâ€â€â€â€  â–ˆâ–ˆâ€â€â€â–ˆâ–ˆâ€
-â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ€  â–ˆâ–ˆâ€ â€â–ˆâ–ˆâ–ˆâ–ˆâ€â€ â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ€â–ˆâ–ˆâ€  â–ˆâ–ˆâ€â€â€â€â€â€â€â€â€â€â€â€â€  â€â€â€  â€â€â€â€â€  â€â€â€â€â€â€â€â€â€â€â€  â€â€â€
+¦¦¦¦¦¦¦ ¦¦¦¦¦¦¦ ¦¦¦¦¦¦  ¦¦    ¦¦ ¦¦¦¦¦¦¦ ¦¦¦¦¦¦  
+¦¦      ¦¦      ¦¦   ¦¦ ¦¦    ¦¦ ¦¦      ¦¦   ¦¦ 
+¦¦¦¦¦¦¦ ¦¦¦¦¦   ¦¦¦¦¦¦  ¦¦    ¦¦ ¦¦¦¦¦   ¦¦¦¦¦¦  
+     ¦¦ ¦¦      ¦¦   ¦¦  ¦¦  ¦¦  ¦¦      ¦¦   ¦¦ 
+¦¦¦¦¦¦¦ ¦¦¦¦¦¦¦ ¦¦   ¦¦   ¦¦¦¦   ¦¦¦¦¦¦¦ ¦¦   ¦¦                                           
 
 prod dependencies: {
     @mattermost/client      : https://www.npmjs.com/package/@mattermost/client
@@ -101,12 +101,12 @@ const Logger = require('./Logger');
 const Validator = require('./Validator');
 const RoomPassword = require('./RoomPassword');
 const HtmlInjector = require('./HtmlInjector');
-const { initMeetflow } = require('./meetflow');
-const { getSessionUser } = require('./meetflow/session');
+const { initSyncroom } = require('./Syncroom');
+const { getSessionUser } = require('./Syncroom/session');
 const log = new Logger('Server');
 
-function requireMeetflowLogin(req, res) {
-    if (config?.ui?.brand?.meetflow?.enabled === false) return true;
+function requireSyncroomLogin(req, res) {
+    if (config?.ui?.brand?.syncroom?.enabled === false) return true;
     if (getSessionUser(req)) return true;
     const next = encodeURIComponent(req.originalUrl || '/dashboard');
     res.redirect('/login?next=' + next);
@@ -184,7 +184,7 @@ const scheduleMeetingLimiter = rateLimit({
     keyGenerator: getRequesterKey,
 });
 
-// Active rooms endpoint rate limiter (per IP) â€” public endpoint, so prevent
+// Active rooms endpoint rate limiter (per IP) — public endpoint, so prevent
 // enumeration / scraping abuse without breaking the public "event zone" UX.
 const activeRoomsLimiterCfg = config.ui?.rooms?.activeRoomsRateLimit || {};
 const activeRoomsLimiterWindowMs = activeRoomsLimiterCfg.windowMs || 60 * 1000;
@@ -219,7 +219,7 @@ const recSyncLimiter = rateLimit({
     keyGenerator: (req) => ipKeyGenerator(req),
 });
 
-// Socket.IO createRoom rate limiter (per IP) â€” sliding window in memory.
+// Socket.IO createRoom rate limiter (per IP) — sliding window in memory.
 // Prevents unauthenticated sockets from spamming arbitrary room entries
 // into the in-memory roomList (which feeds /api/v1/activeRooms).
 const createRoomLimiterCfg = config.features?.createRoomRateLimit || {};
@@ -950,9 +950,12 @@ function startServer() {
         res.status(200).json({ message: config?.ui?.themes ? config.ui.themes : false });
     });
 
-    // main page
+    // main page — signed-in Syncroom users go straight to dashboard
     app.get('/', OIDCAuth, (req, res) => {
         //log.debug('/ - hostCfg ----->', hostCfg);
+        if (config?.ui?.brand?.syncroom?.enabled !== false && getSessionUser(req)) {
+            return res.redirect('/dashboard');
+        }
         if (!OIDC.enabled && hostCfg.protected) {
             hostCfg.authenticated = false;
             res.redirect('/login');
@@ -970,11 +973,11 @@ function startServer() {
         return res.sendFile(views.rtmpStreamer);
     });
 
-    // set new room name and join (MeetFlow: logged-in only)
+    // set new room name and join (Syncroom: logged-in only)
     app.get('/newroom', OIDCAuth, (req, res) => {
         //log.info('/newroom - hostCfg ----->', hostCfg);
 
-        if (!requireMeetflowLogin(req, res)) return;
+        if (!requireSyncroomLogin(req, res)) return;
 
         if (!OIDC.enabled && hostCfg.protected) {
             hostCfg.authenticated = false;
@@ -987,13 +990,13 @@ function startServer() {
 
     // Get Active rooms
     app.get('/activeRooms', OIDCAuth, (req, res) => {
-        if (!requireMeetflowLogin(req, res)) return;
+        if (!requireSyncroomLogin(req, res)) return;
         htmlInjector.injectHtml(views.activeRooms, res);
     });
 
-    // Get Customize room (MeetFlow: logged-in only)
+    // Get Customize room (Syncroom: logged-in only)
     app.get('/customizeRoom', OIDCAuth, (req, res) => {
-        if (!requireMeetflowLogin(req, res)) return;
+        if (!requireSyncroomLogin(req, res)) return;
         htmlInjector.injectHtml(views.customizeRoom, res);
     });
 
@@ -1337,20 +1340,23 @@ function startServer() {
         htmlInjector.injectHtml(views.whoAreYou, res);
     });
 
-    // MeetFlow account login (always when enabled) or host-protected login
+    // Syncroom account login (always when enabled) or host-protected login
     app.get('/login', (req, res) => {
-        const meetflowEnabled = config?.ui?.brand?.meetflow?.enabled !== false;
-        if (meetflowEnabled || hostCfg.protected || hostCfg.user_auth) {
+        const syncroomEnabled = config?.ui?.brand?.syncroom?.enabled !== false;
+        if (syncroomEnabled && getSessionUser(req)) {
+            return res.redirect('/dashboard');
+        }
+        if (syncroomEnabled || hostCfg.protected || hostCfg.user_auth) {
             return htmlInjector.injectHtml(views.login, res);
         }
         res.redirect('/');
     });
 
-    // MeetFlow dashboard / register / auth APIs (must be before /:roomId)
+    // Syncroom dashboard / register / auth APIs (must be before /:roomId)
     try {
-        initMeetflow({ app, config, views, htmlInjector, roomList });
+        initSyncroom({ app, config, views, htmlInjector, roomList });
     } catch (err) {
-        log.error('MeetFlow init failed', err.message || err);
+        log.error('Syncroom init failed', err.message || err);
     }
 
     // handle logged on host protected
@@ -2357,12 +2363,12 @@ function startServer() {
             log.log(
                 `%c
     
-        â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•— â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ–ˆâ•—   â–ˆâ–ˆâ•—      â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ•—   â–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— 
-        â–ˆâ–ˆâ•”â•â•â•â•â•â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•â•â•â•â• â–ˆâ–ˆâ–ˆâ–ˆâ•—  â–ˆâ–ˆâ•‘      â–ˆâ–ˆâ•”â•â•â•â•â•â–ˆâ–ˆâ•”â•â•â•â•â•â–ˆâ–ˆâ•”â•â•â–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•â•â•â•â•â–ˆâ–ˆâ•”â•â•â–ˆâ–ˆâ•—
-        â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•”â–ˆâ–ˆâ•— â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—  â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•
-        â•šâ•â•â•â•â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘â•šâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘â•šâ•â•â•â•â•â•šâ•â•â•â•â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•â•â•  â–ˆâ–ˆâ•”â•â•â–ˆâ–ˆâ•—â•šâ–ˆâ–ˆâ•— â–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•”â•â•â•  â–ˆâ–ˆâ•”â•â•â–ˆâ–ˆâ•—
-        â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘â•šâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•â–ˆâ–ˆâ•‘ â•šâ–ˆâ–ˆâ–ˆâ–ˆâ•‘      â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ•‘ â•šâ–ˆâ–ˆâ–ˆâ–ˆâ•”â• â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘  â–ˆâ–ˆâ•‘
-        â•šâ•â•â•â•â•â•â•â•šâ•â• â•šâ•â•â•â•â•â• â•šâ•â•  â•šâ•â•â•â•      â•šâ•â•â•â•â•â•â•â•šâ•â•â•â•â•â•â•â•šâ•â•  â•šâ•â•  â•šâ•â•â•â•  â•šâ•â•â•â•â•â•â•â•šâ•â•  â•šâ•â• started...
+        ¦¦¦¦¦¦¦+¦¦+ ¦¦¦¦¦¦+ ¦¦¦+   ¦¦+      ¦¦¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦+ ¦¦+   ¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦+ 
+        ¦¦+----+¦¦¦¦¦+----+ ¦¦¦¦+  ¦¦¦      ¦¦+----+¦¦+----+¦¦+--¦¦+¦¦¦   ¦¦¦¦¦+----+¦¦+--¦¦+
+        ¦¦¦¦¦¦¦+¦¦¦¦¦¦  ¦¦¦+¦¦+¦¦+ ¦¦¦¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦+  ¦¦¦¦¦¦++¦¦¦   ¦¦¦¦¦¦¦¦+  ¦¦¦¦¦¦++
+        +----¦¦¦¦¦¦¦¦¦   ¦¦¦¦¦¦+¦¦+¦¦¦+----++----¦¦¦¦¦+--+  ¦¦+--¦¦++¦¦+ ¦¦++¦¦+--+  ¦¦+--¦¦+
+        ¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦¦¦++¦¦¦ +¦¦¦¦¦      ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦¦  ¦¦¦ +¦¦¦¦++ ¦¦¦¦¦¦¦+¦¦¦  ¦¦¦
+        +------++-+ +-----+ +-+  +---+      +------++------++-+  +-+  +---+  +------++-+  +-+ started...
     
         `,
                 'font-family:monospace'
@@ -4106,7 +4112,7 @@ function startServer() {
 
             // Security: strip fabric `image` objects whose `src` is not a safe http(s) URL
             // or `data:image/*` URI. This prevents SSRF probes (http://127.0.0.1, AWS IMDS,
-            // 192.168/10/172.16/8 rangesâ€¦) and dangerous schemes (javascript:, file:, blob:)
+            // 192.168/10/172.16/8 ranges…) and dangerous schemes (javascript:, file:, blob:)
             // from being rendered by every other peer's browser.
             const sanitized = Validator.sanitizeWbCanvasJson(data, ({ src }) => {
                 log.debug('wbCanvasToJson dropped unsafe image src', { src });
@@ -4594,7 +4600,7 @@ function startServer() {
 
             const room = getRoom(socket);
 
-            // Resolve sender from server-side state â€” never trust client-supplied identity
+            // Resolve sender from server-side state — never trust client-supplied identity
             const peer = room.getPeer(socket.id);
             if (!peer) return;
 
@@ -5734,7 +5740,7 @@ function startServer() {
 
     function isPeerPresenter(room_id, peer_id, peer_name, peer_uuid) {
         try {
-            // 1. Direct lookup by peer_id (server-assigned socket.id â€” not user-controlled)
+            // 1. Direct lookup by peer_id (server-assigned socket.id — not user-controlled)
             const storedPresenter = presenters[room_id]?.[peer_id];
             if (storedPresenter) {
                 const isPresenter =

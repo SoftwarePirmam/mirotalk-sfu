@@ -1,6 +1,6 @@
-'use strict';
+﻿'use strict';
 
-const brandDataKey = 'meetflowBrandData';
+const brandDataKey = 'SyncroomBrandData';
 const brandData = window.sessionStorage.getItem(brandDataKey);
 
 const title = document.getElementById('title');
@@ -249,7 +249,7 @@ function mergeBrand(current, updated) {
     return current;
 }
 
-// BRAND check — hide MeetFlow marketing sections unless explicitly enabled
+// BRAND check — hide Syncroom marketing sections unless explicitly enabled
 function checkBrand() {
     setSectionVisible(topSponsors, !!BRAND.html?.topSponsors);
     setSectionVisible(features, !!BRAND.html?.features);

@@ -1,9 +1,9 @@
-'use strict';
+﻿'use strict';
 
 const jwt = require('jsonwebtoken');
 const { getJwtKeys } = require('../JwtSecret');
 
-const COOKIE_NAME = 'meetflow_session';
+const COOKIE_NAME = 'syncroom_session';
 
 function sessionMaxAgeMs(sessionDays) {
     return Math.max(Number(sessionDays) || 14, 1) * 24 * 60 * 60 * 1000;
@@ -17,9 +17,9 @@ function signSession(user, sessionDays) {
             sub: String(user.id),
             email: user.email,
             displayName: user.displayName,
-            purpose: 'meetflow',
+            purpose: 'syncroom',
         },
-        keys.meetflow,
+        keys.syncroom,
         { expiresIn: Math.floor(maxAgeMs / 1000) }
     );
     return { token, maxAgeMs };
@@ -29,8 +29,8 @@ function verifySessionToken(token) {
     if (!token) return null;
     try {
         const keys = getJwtKeys();
-        const payload = jwt.verify(token, keys.meetflow);
-        if (payload.purpose !== 'meetflow') return null;
+        const payload = jwt.verify(token, keys.syncroom);
+        if (payload.purpose !== 'syncroom') return null;
         return {
             id: Number(payload.sub),
             email: payload.email,
@@ -77,7 +77,7 @@ function requireAuth(req, res, next) {
     if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
     }
-    req.meetflowUser = user;
+    req.syncroomUser = user;
     next();
 }
 
@@ -86,7 +86,7 @@ function requireAuthPage(req, res, next) {
     if (!user) {
         return res.redirect('/login?next=/dashboard');
     }
-    req.meetflowUser = user;
+    req.syncroomUser = user;
     next();
 }
 

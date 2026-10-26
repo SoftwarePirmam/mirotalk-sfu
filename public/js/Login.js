@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 console.log(window.location);
 
@@ -145,7 +145,7 @@ function login() {
         setLoginLoading(true);
         hideLoginError();
 
-        // MeetFlow account login (email) → dashboard; host username still uses /login
+        // Syncroom account login (email) → dashboard; host username still uses /login
         if (looksLikeEmail(username)) {
             axios
                 .post('/api/app/auth/login', { email: username, password }, { withCredentials: true })

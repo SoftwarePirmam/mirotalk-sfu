@@ -1,4 +1,4 @@
-services:
+﻿services:
     mirotalksfu:
         image: mirotalk/sfu:latest
         container_name: mirotalksfu
@@ -17,7 +17,7 @@ services:
         volumes:
             - ./app/src/config.js:/src/app/src/config.js:ro
             - ./.env:/src/.env:ro
-            # Persist MeetFlow SQLite (users + meetings)
+            # Persist Syncroom SQLite (users + meetings)
             - ./data:/src/data
             # Mandatory volume if `RECORDING_ENABLED=true` in the .env
             # - ./app/rec:/src/app/rec

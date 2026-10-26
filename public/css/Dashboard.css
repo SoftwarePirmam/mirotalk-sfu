@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Source+Sans+3:wght@400;500;600&display=swap');
+
 :root {
     --mf-bg: #0b1220;
     --mf-panel: rgba(255, 255, 255, 0.04);
@@ -5,11 +7,11 @@
     --mf-border: rgba(255, 255, 255, 0.1);
     --mf-text: rgba(255, 255, 255, 0.94);
     --mf-muted: rgba(255, 255, 255, 0.58);
-    --mf-accent: #14b8a6;
-    --mf-accent-2: #0ea5e9;
+    --mf-accent: #0f9d8a;
+    --mf-accent-2: #1289c4;
     --mf-danger: #ff5c5c;
     --mf-radius: 16px;
-    --mf-font: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+    --mf-font: 'Outfit', 'Source Sans 3', sans-serif;
 }
 
 * {

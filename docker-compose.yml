@@ -1,4 +1,4 @@
-# MiroTalk SFU — Coolify / Traefik production compose
+﻿# MiroTalk SFU — Coolify / Traefik production compose
 #
 # HTTP/WebSocket signaling → Traefik (HTTPS on 443)
 # WebRTC media (UDP/TCP)   → published directly on the host (NOT proxied)
@@ -47,15 +47,15 @@ services:
       REDIRECT_URL: ${REDIRECT_URL:-}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
 
-      # MeetFlow dashboard / local accounts (registration off by default)
-      APP_NAME: ${APP_NAME:-MeetFlow}
-      MEETFLOW_ENABLED: ${MEETFLOW_ENABLED:-true}
-      MEETFLOW_DB_PATH: ${MEETFLOW_DB_PATH:-./data/meetflow.db}
-      MEETFLOW_ADMIN_EMAIL: ${MEETFLOW_ADMIN_EMAIL:-admin@meetflow.local}
-      MEETFLOW_ADMIN_PASSWORD: ${MEETFLOW_ADMIN_PASSWORD:-MeetFlowAdmin123!}
-      MEETFLOW_ADMIN_NAME: ${MEETFLOW_ADMIN_NAME:-Admin}
-      MEETFLOW_ALLOW_REGISTER: ${MEETFLOW_ALLOW_REGISTER:-false}
-      MEETFLOW_SESSION_DAYS: ${MEETFLOW_SESSION_DAYS:-14}
+      # Syncroom dashboard / local accounts (registration off by default)
+      APP_NAME: ${APP_NAME:-Syncroom}
+      SYNCROOM_ENABLED: ${SYNCROOM_ENABLED:-true}
+      SYNCROOM_DB_PATH: ${SYNCROOM_DB_PATH:-./data/syncroom.db}
+      SYNCROOM_ADMIN_EMAIL: ${SYNCROOM_ADMIN_EMAIL:-admin@syncroom.local}
+      SYNCROOM_ADMIN_PASSWORD: ${SYNCROOM_ADMIN_PASSWORD:-SyncroomAdmin123!}
+      SYNCROOM_ADMIN_NAME: ${SYNCROOM_ADMIN_NAME:-Admin}
+      SYNCROOM_ALLOW_REGISTER: ${SYNCROOM_ALLOW_REGISTER:-false}
+      SYNCROOM_SESSION_DAYS: ${SYNCROOM_SESSION_DAYS:-14}
       SHOW_TOP_SPONSORS: ${SHOW_TOP_SPONSORS:-false}
       SHOW_FEATURES: ${SHOW_FEATURES:-false}
       SHOW_TEAMS: ${SHOW_TEAMS:-false}
@@ -108,13 +108,13 @@ services:
       start_period: 40s
 
     volumes:
-      # Persist MeetFlow users + meetings SQLite DB across redeploys
-      - meetflow-data:/src/data
+      # Persist Syncroom users + meetings SQLite DB across redeploys
+      - Syncroom-data:/src/data
       # Optional: enable matching features in env first
       # - mirotalk-recordings:/src/app/rec
       # - mirotalk-rtmp:/src/app/rtmp
 
 volumes:
-  meetflow-data:
+  Syncroom-data:
   # mirotalk-recordings:
   # mirotalk-rtmp:

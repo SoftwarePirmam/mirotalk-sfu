@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 const crypto = require('crypto');
 
@@ -14,7 +14,7 @@ const PURPOSES = {
     recUpload: 'rec-upload',
     rtmp: 'rtmp-stream',
     createRoom: 'create-room',
-    meetflow: 'meetflow-session',
+    syncroom: 'syncroom-session',
 };
 
 let cached = null;
@@ -50,7 +50,7 @@ function getJwtKeys(rawSecret = process.env.JWT_SECRET) {
                 recUpload: deriveKey(secret, PURPOSES.recUpload),
                 rtmp: deriveKey(secret, PURPOSES.rtmp),
                 createRoom: deriveKey(secret, PURPOSES.createRoom),
-                meetflow: deriveKey(secret, PURPOSES.meetflow),
+                syncroom: deriveKey(secret, PURPOSES.syncroom),
             }),
         };
     }

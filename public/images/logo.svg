@@ -1,11 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MeetFlow">
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Syncroom">
   <defs>
-    <linearGradient id="mf" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+    <linearGradient id="g" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
       <stop stop-color="#14B8A6"/>
       <stop offset="1" stop-color="#0EA5E9"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="16" fill="#0F172A"/>
-  <path fill="url(#mf)" d="M18 42V22l14 12 14-12v20h-6.5V31.5L32 40.2 24.5 31.5V42H18z"/>
-  <circle cx="48" cy="18" r="5" fill="#5EEAD4"/>
+  <rect width="64" height="64" rx="18" fill="#0B1524"/>
+  <path fill="url(#g)" d="M18 44V20.5c0-1.4 1.6-2.2 2.7-1.4L32 27.2l11.3-8.1c1.1-.8 2.7 0 2.7 1.4V44c0 .9-.7 1.6-1.6 1.6H19.6c-.9 0-1.6-.7-1.6-1.6zm7.2-3.2h13.6V28.8L32 33.4l-6.8-4.6v12z"/>
 </svg>

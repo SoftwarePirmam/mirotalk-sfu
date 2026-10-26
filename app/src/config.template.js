@@ -1,4 +1,4 @@
-'use strict';
+﻿'use strict';
 
 /**
  * ==============================================
@@ -1192,13 +1192,11 @@ module.exports = {
             app: {
                 language: process.env.UI_LANGUAGE || 'en',
                 translationMode: process.env.UI_TRANSLATION_MODE || 'google', // auto (native else Google) | native (no Google) | google (default, always Google)
-                name: process.env.APP_NAME || 'MeetFlow',
-                title:
-                    process.env.APP_TITLE ||
-                    '<h1>MeetFlow</h1> Secure video meetings.<br />Schedule, join, collaborate.',
+                name: process.env.APP_NAME || 'Syncroom',
+                title: process.env.APP_TITLE || 'Syncroom',
                 description:
                     process.env.APP_DESCRIPTION ||
-                    'Sign in to create meetings, manage your calendar, and start secure video rooms.',
+                    'A professional workspace for scheduling meetings, managing your calendar, and hosting secure video rooms.',
                 joinDescription:
                     process.env.JOIN_DESCRIPTION || 'Sign in to create or join rooms from your dashboard.',
                 joinButtonLabel: process.env.JOIN_BUTTON_LABEL || 'JOIN ROOM',
@@ -1212,7 +1210,7 @@ module.exports = {
              * Site-wide settings including icons and page-specific content.
              */
             site: {
-                title: process.env.SITE_TITLE || 'MeetFlow - Video Meetings',
+                title: process.env.SITE_TITLE || 'Syncroom - Video Meetings',
                 icon: process.env.SITE_ICON_PATH || '../images/logo.svg',
                 appleTouchIcon: process.env.APPLE_TOUCH_ICON_PATH || '../images/logo.svg',
                 newRoomTitle: process.env.NEW_ROOM_TITLE || 'Pick name. <br />Share URL. <br />Start conference.',
@@ -1228,9 +1226,9 @@ module.exports = {
             meta: {
                 description:
                     process.env.META_DESCRIPTION ||
-                    'MeetFlow is a self-hosted video meeting platform with dashboard, calendar, and secure rooms.',
+                    'Syncroom is a self-hosted video meeting platform with dashboard, calendar, and secure rooms.',
                 keywords:
-                    process.env.META_KEYWORDS || 'meetflow, webrtc, video calls, meetings, calendar, conference',
+                    process.env.META_KEYWORDS || 'Syncroom, webrtc, video calls, meetings, calendar, conference',
             },
 
             /**
@@ -1240,11 +1238,11 @@ module.exports = {
              */
             og: {
                 type: process.env.OG_TYPE || 'app-webrtc',
-                siteName: process.env.OG_SITE_NAME || 'MeetFlow',
-                title: process.env.OG_TITLE || 'MeetFlow - Video Meetings',
+                siteName: process.env.OG_SITE_NAME || 'Syncroom',
+                title: process.env.OG_TITLE || 'Syncroom - Video Meetings',
                 description:
                     process.env.OG_DESCRIPTION ||
-                    'Schedule and join secure video meetings with MeetFlow.',
+                    'Schedule and join secure video meetings with Syncroom.',
                 image: process.env.OG_IMAGE_URL || '',
                 url: process.env.OG_URL || '',
             },
@@ -1275,7 +1273,7 @@ module.exports = {
              * Customizable text and button labels.
              */
             whoAreYou: {
-                title: process.env.WHO_ARE_YOU_TITLE || 'MeetFlow - Waiting for host to start the meeting',
+                title: process.env.WHO_ARE_YOU_TITLE || 'Syncroom - Waiting for host to start the meeting',
                 waitingRoomHeading: process.env.WHO_ARE_YOU_WAITING_ROOM_HEADING || 'Waiting for host...',
                 waitingRoomDescription:
                     process.env.WHO_ARE_YOU_WAITING_ROOM_DESCRIPTION ||
@@ -1298,24 +1296,24 @@ module.exports = {
              * Customizable heading, description, and button label for the login page.
              */
             login: {
-                heading: process.env.LOGIN_HEADING || 'Welcome to MeetFlow',
+                heading: process.env.LOGIN_HEADING || 'Welcome to Syncroom',
                 description:
-                    process.env.LOGIN_DESCRIPTION || 'Sign in with your MeetFlow account to open the dashboard.',
+                    process.env.LOGIN_DESCRIPTION || 'Sign in with your Syncroom account to open the dashboard.',
                 buttonLabel: process.env.LOGIN_BUTTON_LABEL || 'Sign in',
             },
 
             /**
-             * MeetFlow app layer (accounts, dashboard, calendar)
+             * Syncroom app layer (accounts, dashboard, calendar)
              * OIDC remains available for SSO later via existing security.oidc config.
              */
-            meetflow: {
-                enabled: process.env.MEETFLOW_ENABLED !== 'false',
-                dbPath: process.env.MEETFLOW_DB_PATH || './data/meetflow.db',
-                adminEmail: process.env.MEETFLOW_ADMIN_EMAIL || 'admin@meetflow.local',
-                adminPassword: process.env.MEETFLOW_ADMIN_PASSWORD || 'MeetFlowAdmin123!',
-                adminName: process.env.MEETFLOW_ADMIN_NAME || 'Admin',
-                allowRegister: process.env.MEETFLOW_ALLOW_REGISTER === 'true',
-                sessionDays: Math.max(parseInt(process.env.MEETFLOW_SESSION_DAYS, 10) || 14, 1),
+            syncroom: {
+                enabled: process.env.SYNCROOM_ENABLED !== 'false',
+                dbPath: process.env.SYNCROOM_DB_PATH || './data/syncroom.db',
+                adminEmail: process.env.SYNCROOM_ADMIN_EMAIL || 'admin@syncroom.local',
+                adminPassword: process.env.SYNCROOM_ADMIN_PASSWORD || 'SyncroomAdmin123!',
+                adminName: process.env.SYNCROOM_ADMIN_NAME || 'Admin',
+                allowRegister: process.env.SYNCROOM_ALLOW_REGISTER === 'true',
+                sessionDays: Math.max(parseInt(process.env.SYNCROOM_SESSION_DAYS, 10) || 14, 1),
             },
 
             /**
@@ -1326,7 +1324,7 @@ module.exports = {
              */
             about: {
                 imageUrl: process.env.ABOUT_IMAGE_URL || '../images/logo.svg',
-                title: `MeetFlow v${packageJson.version}`,
+                title: `Syncroom v${packageJson.version}`,
                 html: `
                     <div class="about-content">
                         <p class="about-description">
@@ -1352,7 +1350,7 @@ module.exports = {
                                         href="${process.env.LINKEDIN_URL || '/'}"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                    >${process.env.AUTHOR_NAME || 'MeetFlow'}</a>
+                                    >${process.env.AUTHOR_NAME || 'Syncroom'}</a>
                                 </dd>
                             </div>
                             <div>
@@ -1361,13 +1359,13 @@ module.exports = {
                                     <a
                                         id="email-button"
                                         data-umami-event="Email button"
-                                        href="mailto:${process.env.CONTACT_EMAIL || ''}?subject=${process.env.EMAIL_SUBJECT || 'MeetFlow info'}"
+                                        href="mailto:${process.env.CONTACT_EMAIL || ''}?subject=${process.env.EMAIL_SUBJECT || 'Syncroom info'}"
                                     >${process.env.CONTACT_EMAIL || ''}</a>
                                 </dd>
                             </div>
                         </dl>
                         <footer class="about-footer">
-                            &copy; ${new Date().getFullYear()} ${process.env.COPYRIGHT_TEXT || 'MeetFlow, all rights reserved'}
+                            &copy; ${new Date().getFullYear()} ${process.env.COPYRIGHT_TEXT || 'Syncroom, all rights reserved'}
                         </footer>
                     </div>
                 `,
