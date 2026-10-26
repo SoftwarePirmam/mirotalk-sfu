@@ -33,7 +33,8 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       API_KEY_SECRET: ${API_KEY_SECRET}
       HOST_PROTECTED: ${HOST_PROTECTED:-false}
-      HOST_USER_AUTH: ${HOST_USER_AUTH:-false}
+      # true = every join needs a signed, expiring token from AdvanceSchool, so finished rooms cannot be reopened
+      HOST_USER_AUTH: ${HOST_USER_AUTH:-true}
       HOST_USERS: ${HOST_USERS:-}
       # false = only token presenters (AdvanceSchool staff) get host controls; guests never auto-promote
       PRESENTER_JOIN_FIRST: ${PRESENTER_JOIN_FIRST:-false}
