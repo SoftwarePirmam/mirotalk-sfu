@@ -27,7 +27,8 @@ function initMeetflow({ app, config, views, htmlInjector, roomList }) {
     });
 
     app.get('/register', (req, res) => {
-        if (mf.allowRegister === false) {
+        // Registration disabled for now — only seeded/admin accounts
+        if (!mf.allowRegister) {
             return res.redirect('/login');
         }
         const user = getSessionUser(req);

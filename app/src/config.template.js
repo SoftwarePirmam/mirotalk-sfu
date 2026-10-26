@@ -1313,7 +1313,7 @@ module.exports = {
                 adminEmail: process.env.MEETFLOW_ADMIN_EMAIL || 'admin@meetflow.local',
                 adminPassword: process.env.MEETFLOW_ADMIN_PASSWORD || 'MeetFlowAdmin123!',
                 adminName: process.env.MEETFLOW_ADMIN_NAME || 'Admin',
-                allowRegister: process.env.MEETFLOW_ALLOW_REGISTER !== 'false',
+                allowRegister: process.env.MEETFLOW_ALLOW_REGISTER === 'true',
                 sessionDays: Math.max(parseInt(process.env.MEETFLOW_SESSION_DAYS, 10) || 14, 1),
             },
 

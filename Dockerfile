@@ -54,6 +54,9 @@ COPY --from=builder --chown=node:node /src/node_modules ./node_modules
 COPY --from=builder --chown=node:node /src/app ./app
 COPY --from=builder --chown=node:node /src/public ./public
 
+# MeetFlow SQLite DB (mount a volume over /src/data in production)
+RUN mkdir -p /src/data && chown -R node:node /src/data
+
 USER node
 
 EXPOSE 8080

@@ -47,6 +47,26 @@ services:
       REDIRECT_URL: ${REDIRECT_URL:-}
       CORS_ORIGIN: ${CORS_ORIGIN:-*}
 
+      # MeetFlow dashboard / local accounts (registration off by default)
+      APP_NAME: ${APP_NAME:-MeetFlow}
+      MEETFLOW_ENABLED: ${MEETFLOW_ENABLED:-true}
+      MEETFLOW_DB_PATH: ${MEETFLOW_DB_PATH:-./data/meetflow.db}
+      MEETFLOW_ADMIN_EMAIL: ${MEETFLOW_ADMIN_EMAIL:-admin@meetflow.local}
+      MEETFLOW_ADMIN_PASSWORD: ${MEETFLOW_ADMIN_PASSWORD:-MeetFlowAdmin123!}
+      MEETFLOW_ADMIN_NAME: ${MEETFLOW_ADMIN_NAME:-Admin}
+      MEETFLOW_ALLOW_REGISTER: ${MEETFLOW_ALLOW_REGISTER:-false}
+      MEETFLOW_SESSION_DAYS: ${MEETFLOW_SESSION_DAYS:-14}
+      SHOW_TOP_SPONSORS: ${SHOW_TOP_SPONSORS:-false}
+      SHOW_FEATURES: ${SHOW_FEATURES:-false}
+      SHOW_TEAMS: ${SHOW_TEAMS:-false}
+      SHOW_TRY_EASIER: ${SHOW_TRY_EASIER:-false}
+      SHOW_POWERED_BY: ${SHOW_POWERED_BY:-false}
+      SHOW_SPONSORS: ${SHOW_SPONSORS:-false}
+      SHOW_PAST_SPONSORS: ${SHOW_PAST_SPONSORS:-false}
+      SHOW_ADVERTISERS: ${SHOW_ADVERTISERS:-false}
+      SHOW_SUPPORT_US: ${SHOW_SUPPORT_US:-false}
+      SHOW_FOOTER: ${SHOW_FOOTER:-false}
+
     # Traefik (Coolify proxy) reaches the app on this internal port.
     # Assign your domain to port 8080 in the Coolify UI.
     expose:
@@ -87,11 +107,14 @@ services:
       retries: 3
       start_period: 40s
 
-    # Optional persistent volumes (enable matching features in env first)
-    # volumes:
-    #   - mirotalk-recordings:/src/app/rec
-    #   - mirotalk-rtmp:/src/app/rtmp
+    volumes:
+      # Persist MeetFlow users + meetings SQLite DB across redeploys
+      - meetflow-data:/src/data
+      # Optional: enable matching features in env first
+      # - mirotalk-recordings:/src/app/rec
+      # - mirotalk-rtmp:/src/app/rtmp
 
-# volumes:
-#   mirotalk-recordings:
-#   mirotalk-rtmp:
+volumes:
+  meetflow-data:
+  # mirotalk-recordings:
+  # mirotalk-rtmp:
