@@ -1,27 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap');
 
 :root {
-    --body-bg: linear-gradient(135deg, #0e0e14, #1e1e28);
+    --body-bg: linear-gradient(145deg, #0b1220 0%, #0f1c2e 45%, #102a2a 100%);
     --border: 0.5px solid rgb(255 255 255 / 18%);
     --border-radius: 1.125rem;
     --msger-width: 800px;
     --msger-height: 700px;
     --msger-bubble-width: 85%;
-    --msger-bg: linear-gradient(135deg, #0e0e14, #1e1e28);
+    --msger-bg: linear-gradient(145deg, #0b1220, #102a2a);
     --wb-width: 1920px;
     --wb-height: 1080px;
-    --wb-bg: linear-gradient(135deg, #0e0e14, #1e1e28);
-    --select-bg: #161622;
+    --wb-bg: linear-gradient(145deg, #0b1220, #102a2a);
+    --select-bg: #122033;
     --select-border-radius: 12px;
-    --select-focus-color: rgba(102, 190, 255, 0.5);
-    --left-msg-bg: #141420;
-    --right-msg-bg: #1a1a26;
+    --select-focus-color: rgba(45, 212, 191, 0.55);
+    --left-msg-bg: #121c2c;
+    --right-msg-bg: #15303a;
     --private-msg-bg: #6b1226;
     --box-shadow: 0px 8px 16px 0px rgb(0 0 0);
     --btns-hover-scale: scale(1.1);
-    --settings-bg: linear-gradient(135deg, #0e0e14, #1e1e28);
-    --tab-btn-active: #1e1e28;
-    --btns-bg-color: rgba(10, 10, 16, 0.8);
+    --settings-bg: linear-gradient(145deg, #0b1220, #102a2a);
+    --tab-btn-active: #15303a;
+    --btns-bg-color: rgba(11, 18, 32, 0.85);
 
     /* bottom buttons bar horizontal default */
     --bottom-btns-top: auto;
@@ -50,15 +50,15 @@
 
     /* Design tokens (additive, non-breaking) */
 
-    /* Semantic colors */
-    --color-accent: #4678f9;
-    --color-accent-strong: #3b5de7;
-    --color-accent-soft: rgba(70, 120, 249, 0.12);
+    /* Semantic colors — MeetFlow teal/cyan */
+    --color-accent: #14b8a6;
+    --color-accent-strong: #0d9488;
+    --color-accent-soft: rgba(20, 184, 166, 0.14);
     --color-success: #2ece89;
     --color-warning: #fbbf24;
     --color-danger: #ff4b4b;
     --color-danger-strong: #dc3545;
-    --color-focus: rgba(102, 190, 255, 0.65);
+    --color-focus: rgba(45, 212, 191, 0.7);
 
     /* Foreground */
     --fg-1: rgba(255, 255, 255, 0.95);
@@ -134,7 +134,7 @@
 
 * {
     outline: none;
-    font-family: 'Montserrat';
+    font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
 }
 
 *:focus-visible {

@@ -116,9 +116,20 @@ loginBtn.onclick = (e) => {
     login();
 };
 
+function getLoginRedirectTarget() {
+    const qs = new URLSearchParams(window.location.search);
+    const next = filterXSS(qs.get('next') || '');
+    if (next && next.startsWith('/') && !next.startsWith('//')) return next;
+    return '/dashboard';
+}
+
+function looksLikeEmail(value) {
+    return String(value || '').includes('@');
+}
+
 function login() {
-    const username = filterXSS(document.getElementById('username').value);
-    const password = filterXSS(document.getElementById('password').value);
+    const username = filterXSS(document.getElementById('username').value.trim());
+    const password = document.getElementById('password').value;
 
     // http://localhost:3010/join/?room=test
     // http://localhost:3010/join/?room=test&roomPassword=0&name=admin&audio=0&video=0&screen=0&notify=0
@@ -133,6 +144,29 @@ function login() {
     if (username && password) {
         setLoginLoading(true);
         hideLoginError();
+
+        // MeetFlow account login (email) → dashboard; host username still uses /login
+        if (looksLikeEmail(username)) {
+            axios
+                .post('/api/app/auth/login', { email: username, password }, { withCredentials: true })
+                .then(function () {
+                    if (room) {
+                        window.location.href = '/join/' + window.location.search;
+                        return;
+                    }
+                    if (roomPath && roomPath !== 'login') {
+                        window.location.href = '/join/' + roomPath;
+                        return;
+                    }
+                    window.location.href = getLoginRedirectTarget();
+                })
+                .catch(function (error) {
+                    setLoginLoading(false);
+                    const msg = error?.response?.data?.message || 'Invalid email or password';
+                    showLoginError(msg);
+                });
+            return;
+        }
 
         axios
             .post('/login', {

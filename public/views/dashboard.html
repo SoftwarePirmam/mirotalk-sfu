@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title id="title">MeetFlow Dashboard</title>
+        <link id="icon" rel="shortcut icon" href="../images/logo.svg" />
+        <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/logo.svg" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:type" content="{{OG_TYPE}}" />
+        <meta property="og:site_name" content="{{OG_SITE_NAME}}" />
+        <meta property="og:title" content="{{OG_TITLE}}" />
+        <meta property="og:description" content="{{OG_DESCRIPTION}}" />
+        <meta property="og:image" content="{{OG_IMAGE}}" />
+        <meta property="og:url" content="{{OG_URL}}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+        <link rel="stylesheet" href="../css/Root.css" />
+        <link rel="stylesheet" href="../css/Dashboard.css" />
+        <script defer src="../js/Brand.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="../js/Dashboard.js"></script>
+    </head>
+    <body class="mf-dashboard">
+        <div class="mf-shell">
+            <aside class="mf-sidebar">
+                <a class="mf-brand" href="/dashboard">
+                    <img src="../images/logo.svg" alt="MeetFlow" />
+                    <span>MeetFlow</span>
+                </a>
+                <nav class="mf-nav">
+                    <button type="button" class="active" data-view="overview">
+                        <i class="fa-solid fa-gauge"></i> Overview
+                    </button>
+                    <button type="button" data-view="meetings">
+                        <i class="fa-solid fa-video"></i> Meetings
+                    </button>
+                    <button type="button" data-view="calendar">
+                        <i class="fa-solid fa-calendar-days"></i> Calendar
+                    </button>
+                </nav>
+                <div class="mf-sidebar-footer">
+                    <div id="mfUserLabel" class="mf-user">Signed in</div>
+                    <button id="mfLogoutBtn" class="mf-btn" type="button">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+            </aside>
+
+            <main class="mf-main">
+                <div class="mf-topbar">
+                    <h1 id="mfPageTitle">Overview</h1>
+                    <div class="mf-actions">
+                        <button id="mfInstantBtn" class="mf-btn primary" type="button">
+                            <i class="fa-solid fa-bolt"></i> Start instant meeting
+                        </button>
+                        <a class="mf-btn" href="/"><i class="fa-solid fa-house"></i> Home</a>
+                    </div>
+                </div>
+
+                <section id="view-overview">
+                    <div class="mf-grid">
+                        <div class="mf-card">
+                            <h3>Upcoming</h3>
+                            <div id="statUpcoming" class="mf-stat">0</div>
+                        </div>
+                        <div class="mf-card">
+                            <h3>Total meetings</h3>
+                            <div id="statTotal" class="mf-stat">0</div>
+                        </div>
+                        <div class="mf-card">
+                            <h3>Live rooms</h3>
+                            <div id="statLive" class="mf-stat">0</div>
+                        </div>
+                    </div>
+                    <div class="mf-panel">
+                        <h2>Next up</h2>
+                        <div id="overviewList"></div>
+                    </div>
+                </section>
+
+                <section id="view-meetings" class="mf-hidden">
+                    <div class="mf-panel">
+                        <h2>Create meeting</h2>
+                        <form id="meetingForm" class="mf-form">
+                            <div class="mf-form-row">
+                                <label>
+                                    Title
+                                    <input id="mTitle" required maxlength="120" placeholder="Weekly sync" />
+                                </label>
+                                <label>
+                                    Room id (optional)
+                                    <input id="mRoomId" maxlength="64" placeholder="auto-generated" />
+                                </label>
+                            </div>
+                            <div class="mf-form-row">
+                                <label>
+                                    Starts at
+                                    <input id="mStartsAt" type="datetime-local" required />
+                                </label>
+                                <label>
+                                    Duration (minutes)
+                                    <input id="mDuration" type="number" min="5" value="30" required />
+                                </label>
+                            </div>
+                            <label>
+                                Description
+                                <textarea id="mDescription" maxlength="2000" placeholder="Agenda / notes"></textarea>
+                            </label>
+                            <div>
+                                <button class="mf-btn primary" type="submit">
+                                    <i class="fa-solid fa-plus"></i> Save meeting
+                                </button>
+                            </div>
+                        </form>
+                        <h2>Your meetings</h2>
+                        <div id="meetingsList"></div>
+                    </div>
+                </section>
+
+                <section id="view-calendar" class="mf-hidden">
+                    <div class="mf-panel">
+                        <div class="mf-calendar-head">
+                            <button id="calPrev" class="mf-btn" type="button">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </button>
+                            <h2 id="calLabel" style="margin: 0">Month</h2>
+                            <button id="calNext" class="mf-btn" type="button">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div id="calGrid" class="mf-calendar-grid"></div>
+                        <div class="mf-day-list">
+                            <h2 id="calDayTitle">Selected day</h2>
+                            <div id="calDayList"></div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </body>
+</html>

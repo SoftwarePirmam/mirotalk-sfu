@@ -3,7 +3,7 @@
     <head>
         <!-- Title and Icon -->
 
-        <title id="title">MiroTalk SFU - Host Protected login required.</title>
+        <title id="title">MeetFlow - Sign in</title>
         <link id="icon" rel="shortcut icon" href="../images/logo.svg" />
         <link id="appleTouchIcon" rel="apple-touch-icon" href="../images/logo.svg" />
 
@@ -90,7 +90,7 @@
                                     <img
                                         id="headerLogo"
                                         src="../images/logo.svg"
-                                        alt="MiroTalk SFU"
+                                        alt="MeetFlow"
                                         width="32"
                                         height="32"
                                     />
@@ -110,17 +110,17 @@
                                     <div class="login-icon">
                                         <i id="loginIconEl" class="fa-solid fa-lock"></i>
                                     </div>
-                                    <h2 id="loginHeading" class="login-title">Welcome back</h2>
+                                    <h2 id="loginHeading" class="login-title">Welcome to MeetFlow</h2>
                                     <p id="loginDescription" class="login-description">
-                                        Enter your credentials to continue.
+                                        Sign in with your MeetFlow account to open the dashboard.
                                     </p>
                                     <div class="login-input-group">
-                                        <i class="fa-solid fa-user"></i>
+                                        <i class="fa-solid fa-envelope"></i>
                                         <input
                                             id="username"
                                             class="form-input"
                                             type="text"
-                                            placeholder="Username"
+                                            placeholder="Email or username"
                                             maxlength="254"
                                             autocomplete="username"
                                             required
@@ -133,7 +133,7 @@
                                             class="form-input"
                                             type="password"
                                             placeholder="Password"
-                                            maxlength="36"
+                                            maxlength="128"
                                             autocomplete="current-password"
                                             required
                                         />
@@ -161,12 +161,15 @@
                                     </div>
                                     <button id="loginButton" class="login-btn pulse" type="button">
                                         <span id="loginBtnText"
-                                            ><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Login</span
+                                            ><i class="fa-solid fa-right-to-bracket"></i>&nbsp; Sign in</span
                                         >
                                         <span id="loginBtnLoader" class="login-btn-loader">
                                             <i class="fa-solid fa-circle-notch fa-spin"></i>&nbsp; Signing in...
                                         </span>
                                     </button>
+                                    <p id="meetflowAuthLinks" class="login-description mt-3 mb-0">
+                                        New here? <a href="/register">Create an account</a>
+                                    </p>
                                 </div>
                                 <!-- Join Room Section hidden -->
                                 <div id="joinRoomForm" class="login-form-section">

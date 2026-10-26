@@ -1192,13 +1192,13 @@ module.exports = {
             app: {
                 language: process.env.UI_LANGUAGE || 'en',
                 translationMode: process.env.UI_TRANSLATION_MODE || 'google', // auto (native else Google) | native (no Google) | google (default, always Google)
-                name: process.env.APP_NAME || 'MiroTalk SFU',
+                name: process.env.APP_NAME || 'MeetFlow',
                 title:
                     process.env.APP_TITLE ||
-                    '<h1>MiroTalk SFU</h1> Free browser based Real-time video calls.<br />Simple, Secure, Fast.',
+                    '<h1>MeetFlow</h1> Secure video meetings.<br />Schedule, join, collaborate.',
                 description:
                     process.env.APP_DESCRIPTION ||
-                    'Start your next video call with a single click. No download, plug-in, or login is required.',
+                    'Sign in to manage meetings, or join a room instantly with a single click.',
                 joinDescription: process.env.JOIN_DESCRIPTION || 'Pick a room name.<br />How about this one?',
                 joinButtonLabel: process.env.JOIN_BUTTON_LABEL || 'JOIN ROOM',
                 customizeButtonLabel: process.env.CUSTOMIZE_BUTTON_LABEL || 'CUSTOMIZE ROOM',
@@ -1211,7 +1211,7 @@ module.exports = {
              * Site-wide settings including icons and page-specific content.
              */
             site: {
-                title: process.env.SITE_TITLE || 'MiroTalk SFU - Open Source WebRTC Video Conferencing',
+                title: process.env.SITE_TITLE || 'MeetFlow - Video Meetings',
                 icon: process.env.SITE_ICON_PATH || '../images/logo.svg',
                 appleTouchIcon: process.env.APPLE_TOUCH_ICON_PATH || '../images/logo.svg',
                 newRoomTitle: process.env.NEW_ROOM_TITLE || 'Pick name. <br />Share URL. <br />Start conference.',
@@ -1227,8 +1227,9 @@ module.exports = {
             meta: {
                 description:
                     process.env.META_DESCRIPTION ||
-                    'Build your own Zoom alternative with MiroTalk SFU, an open-source, self-hosted WebRTC platform powered by Mediasoup for scalable video meetings.',
-                keywords: process.env.META_KEYWORDS || 'webrtc, video calls, conference, screen sharing, mirotalk, sfu',
+                    'MeetFlow is a self-hosted video meeting platform with dashboard, calendar, and secure rooms.',
+                keywords:
+                    process.env.META_KEYWORDS || 'meetflow, webrtc, video calls, meetings, calendar, conference',
             },
 
             /**
@@ -1238,13 +1239,13 @@ module.exports = {
              */
             og: {
                 type: process.env.OG_TYPE || 'app-webrtc',
-                siteName: process.env.OG_SITE_NAME || 'MiroTalk SFU',
-                title: process.env.OG_TITLE || 'MiroTalk SFU - Open Source WebRTC Video Conferencing',
+                siteName: process.env.OG_SITE_NAME || 'MeetFlow',
+                title: process.env.OG_TITLE || 'MeetFlow - Video Meetings',
                 description:
                     process.env.OG_DESCRIPTION ||
-                    'Build your own Zoom alternative with MiroTalk SFU, an open-source self-hosted WebRTC video conferencing platform powered by Mediasoup. Host scalable meetings, webinars, classrooms, screen sharing and real-time collaboration.',
-                image: process.env.OG_IMAGE_URL || 'https://sfu.mirotalk.com/images/mirotalksfu.png',
-                url: process.env.OG_URL || 'https://sfu.mirotalk.com',
+                    'Schedule and join secure video meetings with MeetFlow.',
+                image: process.env.OG_IMAGE_URL || '',
+                url: process.env.OG_URL || '',
             },
 
             /**
@@ -1254,16 +1255,16 @@ module.exports = {
              * Set to 'false' via environment variables to hide.
              */
             html: {
-                topSponsors: process.env.SHOW_TOP_SPONSORS !== 'false',
-                features: process.env.SHOW_FEATURES !== 'false',
-                teams: process.env.SHOW_TEAMS !== 'false',
-                tryEasier: process.env.SHOW_TRY_EASIER !== 'false',
-                poweredBy: process.env.SHOW_POWERED_BY !== 'false',
-                sponsors: process.env.SHOW_SPONSORS !== 'false',
-                pastSponsors: process.env.SHOW_PAST_SPONSORS !== 'false',
-                advertisers: process.env.SHOW_ADVERTISERS !== 'false',
-                supportUs: process.env.SHOW_SUPPORT_US !== 'false',
-                footer: process.env.SHOW_FOOTER !== 'false',
+                topSponsors: process.env.SHOW_TOP_SPONSORS === 'true',
+                features: process.env.SHOW_FEATURES === 'true',
+                teams: process.env.SHOW_TEAMS === 'true',
+                tryEasier: process.env.SHOW_TRY_EASIER === 'true',
+                poweredBy: process.env.SHOW_POWERED_BY === 'true',
+                sponsors: process.env.SHOW_SPONSORS === 'true',
+                pastSponsors: process.env.SHOW_PAST_SPONSORS === 'true',
+                advertisers: process.env.SHOW_ADVERTISERS === 'true',
+                supportUs: process.env.SHOW_SUPPORT_US === 'true',
+                footer: process.env.SHOW_FOOTER === 'true',
             },
 
             /**
@@ -1273,7 +1274,7 @@ module.exports = {
              * Customizable text and button labels.
              */
             whoAreYou: {
-                title: process.env.WHO_ARE_YOU_TITLE || 'MiroTalk SFU - Waiting for host to start the meeting',
+                title: process.env.WHO_ARE_YOU_TITLE || 'MeetFlow - Waiting for host to start the meeting',
                 waitingRoomHeading: process.env.WHO_ARE_YOU_WAITING_ROOM_HEADING || 'Waiting for host...',
                 waitingRoomDescription:
                     process.env.WHO_ARE_YOU_WAITING_ROOM_DESCRIPTION ||
@@ -1296,9 +1297,24 @@ module.exports = {
              * Customizable heading, description, and button label for the login page.
              */
             login: {
-                heading: process.env.LOGIN_HEADING || 'Welcome back',
-                description: process.env.LOGIN_DESCRIPTION || 'Enter your credentials to continue.',
-                buttonLabel: process.env.LOGIN_BUTTON_LABEL || 'Login',
+                heading: process.env.LOGIN_HEADING || 'Welcome to MeetFlow',
+                description:
+                    process.env.LOGIN_DESCRIPTION || 'Sign in with your MeetFlow account to open the dashboard.',
+                buttonLabel: process.env.LOGIN_BUTTON_LABEL || 'Sign in',
+            },
+
+            /**
+             * MeetFlow app layer (accounts, dashboard, calendar)
+             * OIDC remains available for SSO later via existing security.oidc config.
+             */
+            meetflow: {
+                enabled: process.env.MEETFLOW_ENABLED !== 'false',
+                dbPath: process.env.MEETFLOW_DB_PATH || './data/meetflow.db',
+                adminEmail: process.env.MEETFLOW_ADMIN_EMAIL || 'admin@meetflow.local',
+                adminPassword: process.env.MEETFLOW_ADMIN_PASSWORD || 'MeetFlowAdmin123!',
+                adminName: process.env.MEETFLOW_ADMIN_NAME || 'Admin',
+                allowRegister: process.env.MEETFLOW_ALLOW_REGISTER !== 'false',
+                sessionDays: Math.max(parseInt(process.env.MEETFLOW_SESSION_DAYS, 10) || 14, 1),
             },
 
             /**
@@ -1308,8 +1324,8 @@ module.exports = {
              * Supports HTML content for flexible formatting.
              */
             about: {
-                imageUrl: process.env.ABOUT_IMAGE_URL || '../images/mirotalk-logo.gif',
-                title: `WebRTC SFU v${packageJson.version}`,
+                imageUrl: process.env.ABOUT_IMAGE_URL || '../images/logo.svg',
+                title: `MeetFlow v${packageJson.version}`,
                 html: `
                     <div class="about-content">
                         <p class="about-description">
@@ -1318,24 +1334,24 @@ module.exports = {
                         <a
                             class="about-primary-action"
                             data-umami-event="About button"
-                            href="${process.env.SUPPORT_URL || 'https://docs.mirotalk.com/sites/sfu'}"
+                            href="${process.env.SUPPORT_URL || '/dashboard'}"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
                             <i class="fas fa-info-circle" aria-hidden="true"></i>
-                            <span>${process.env.SUPPORT_TEXT || 'About'}</span>
+                            <span>${process.env.SUPPORT_TEXT || 'Dashboard'}</span>
                         </a>
                         <dl class="about-details">
                             <div>
-                                <dt>${process.env.AUTHOR_LABEL || 'Author'}</dt>
+                                <dt>${process.env.AUTHOR_LABEL || 'Product'}</dt>
                                 <dd>
                                     <a
                                         id="linkedin-button"
                                         data-umami-event="Linkedin button"
-                                        href="${process.env.LINKEDIN_URL || 'https://www.linkedin.com/in/miroslav-pejic-976a07101/'}"
+                                        href="${process.env.LINKEDIN_URL || '/'}"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                    >${process.env.AUTHOR_NAME || 'Miroslav Pejic'}</a>
+                                    >${process.env.AUTHOR_NAME || 'MeetFlow'}</a>
                                 </dd>
                             </div>
                             <div>
@@ -1344,13 +1360,13 @@ module.exports = {
                                     <a
                                         id="email-button"
                                         data-umami-event="Email button"
-                                        href="mailto:${process.env.CONTACT_EMAIL || 'miroslav.pejic.85@gmail.com'}?subject=${process.env.EMAIL_SUBJECT || 'MiroTalk SFU info'}"
-                                    >${process.env.CONTACT_EMAIL || 'miroslav.pejic.85@gmail.com'}</a>
+                                        href="mailto:${process.env.CONTACT_EMAIL || ''}?subject=${process.env.EMAIL_SUBJECT || 'MeetFlow info'}"
+                                    >${process.env.CONTACT_EMAIL || ''}</a>
                                 </dd>
                             </div>
                         </dl>
                         <footer class="about-footer">
-                            &copy; ${new Date().getFullYear()} ${process.env.COPYRIGHT_TEXT || 'MiroTalk SFU. All rights reserved.'}
+                            &copy; ${new Date().getFullYear()} ${process.env.COPYRIGHT_TEXT || 'MeetFlow, all rights reserved'}
                         </footer>
                     </div>
                 `,

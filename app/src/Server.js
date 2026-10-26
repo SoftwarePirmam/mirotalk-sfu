@@ -101,6 +101,7 @@ const Logger = require('./Logger');
 const Validator = require('./Validator');
 const RoomPassword = require('./RoomPassword');
 const HtmlInjector = require('./HtmlInjector');
+const { initMeetflow } = require('./meetflow');
 const log = new Logger('Server');
 const yaml = require('js-yaml');
 const swaggerUi = require('swagger-ui-express');
@@ -558,6 +559,8 @@ const views = {
     html: path.join(__dirname, '../../public/views'),
     landing: path.join(__dirname, '../../', 'public/views/landing.html'),
     login: path.join(__dirname, '../../', 'public/views/login.html'),
+    register: path.join(__dirname, '../../', 'public/views/register.html'),
+    dashboard: path.join(__dirname, '../../', 'public/views/dashboard.html'),
     activeRooms: path.join(__dirname, '../../', 'public/views/activeRooms.html'),
     customizeRoom: path.join(__dirname, '../../', 'public/views/customizeRoom.html'),
     newRoom: path.join(__dirname, '../../', 'public/views/newroom.html'),
@@ -574,6 +577,8 @@ const filesPath = [
     views.newRoom,
     views.room,
     views.login,
+    views.register,
+    views.dashboard,
     views.whoAreYou,
     views.activeRooms,
     views.customizeRoom,
@@ -1319,13 +1324,21 @@ function startServer() {
         htmlInjector.injectHtml(views.whoAreYou, res);
     });
 
-    // handle login if user_auth enabled
+    // MeetFlow account login (always when enabled) or host-protected login
     app.get('/login', (req, res) => {
-        if (hostCfg.protected || hostCfg.user_auth) {
+        const meetflowEnabled = config?.ui?.brand?.meetflow?.enabled !== false;
+        if (meetflowEnabled || hostCfg.protected || hostCfg.user_auth) {
             return htmlInjector.injectHtml(views.login, res);
         }
         res.redirect('/');
     });
+
+    // MeetFlow dashboard / register / auth APIs (must be before /:roomId)
+    try {
+        initMeetflow({ app, config, views, htmlInjector, roomList });
+    } catch (err) {
+        log.error('MeetFlow init failed', err.message || err);
+    }
 
     // handle logged on host protected
     app.get('/logged', (req, res) => {
