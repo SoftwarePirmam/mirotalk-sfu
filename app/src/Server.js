@@ -102,7 +102,16 @@ const Validator = require('./Validator');
 const RoomPassword = require('./RoomPassword');
 const HtmlInjector = require('./HtmlInjector');
 const { initMeetflow } = require('./meetflow');
+const { getSessionUser } = require('./meetflow/session');
 const log = new Logger('Server');
+
+function requireMeetflowLogin(req, res) {
+    if (config?.ui?.brand?.meetflow?.enabled === false) return true;
+    if (getSessionUser(req)) return true;
+    const next = encodeURIComponent(req.originalUrl || '/dashboard');
+    res.redirect('/login?next=' + next);
+    return false;
+}
 const yaml = require('js-yaml');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = yaml.load(fs.readFileSync(path.join(__dirname, '/../api/swagger.yaml'), 'utf8'));
@@ -961,9 +970,11 @@ function startServer() {
         return res.sendFile(views.rtmpStreamer);
     });
 
-    // set new room name and join
+    // set new room name and join (MeetFlow: logged-in only)
     app.get('/newroom', OIDCAuth, (req, res) => {
         //log.info('/newroom - hostCfg ----->', hostCfg);
+
+        if (!requireMeetflowLogin(req, res)) return;
 
         if (!OIDC.enabled && hostCfg.protected) {
             hostCfg.authenticated = false;
@@ -976,11 +987,13 @@ function startServer() {
 
     // Get Active rooms
     app.get('/activeRooms', OIDCAuth, (req, res) => {
+        if (!requireMeetflowLogin(req, res)) return;
         htmlInjector.injectHtml(views.activeRooms, res);
     });
 
-    // Get Customize room
+    // Get Customize room (MeetFlow: logged-in only)
     app.get('/customizeRoom', OIDCAuth, (req, res) => {
+        if (!requireMeetflowLogin(req, res)) return;
         htmlInjector.injectHtml(views.customizeRoom, res);
     });
 

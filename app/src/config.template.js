@@ -1198,8 +1198,9 @@ module.exports = {
                     '<h1>MeetFlow</h1> Secure video meetings.<br />Schedule, join, collaborate.',
                 description:
                     process.env.APP_DESCRIPTION ||
-                    'Sign in to manage meetings, or join a room instantly with a single click.',
-                joinDescription: process.env.JOIN_DESCRIPTION || 'Pick a room name.<br />How about this one?',
+                    'Sign in to create meetings, manage your calendar, and start secure video rooms.',
+                joinDescription:
+                    process.env.JOIN_DESCRIPTION || 'Sign in to create or join rooms from your dashboard.',
                 joinButtonLabel: process.env.JOIN_BUTTON_LABEL || 'JOIN ROOM',
                 customizeButtonLabel: process.env.CUSTOMIZE_BUTTON_LABEL || 'CUSTOMIZE ROOM',
                 joinLastLabel: process.env.JOIN_LAST_LABEL || 'Your recent room:',
