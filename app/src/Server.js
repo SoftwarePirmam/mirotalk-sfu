@@ -1,11 +1,11 @@
 'use strict';
 
 /*
-¦¦¦¦¦¦¦ ¦¦¦¦¦¦¦ ¦¦¦¦¦¦  ¦¦    ¦¦ ¦¦¦¦¦¦¦ ¦¦¦¦¦¦  
-¦¦      ¦¦      ¦¦   ¦¦ ¦¦    ¦¦ ¦¦      ¦¦   ¦¦ 
-¦¦¦¦¦¦¦ ¦¦¦¦¦   ¦¦¦¦¦¦  ¦¦    ¦¦ ¦¦¦¦¦   ¦¦¦¦¦¦  
-     ¦¦ ¦¦      ¦¦   ¦¦  ¦¦  ¦¦  ¦¦      ¦¦   ¦¦ 
-¦¦¦¦¦¦¦ ¦¦¦¦¦¦¦ ¦¦   ¦¦   ¦¦¦¦   ¦¦¦¦¦¦¦ ¦¦   ¦¦                                           
+Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦Â¦Â¦Â¦Â¦  Â¦Â¦    Â¦Â¦ Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦Â¦Â¦Â¦Â¦  
+Â¦Â¦      Â¦Â¦      Â¦Â¦   Â¦Â¦ Â¦Â¦    Â¦Â¦ Â¦Â¦      Â¦Â¦   Â¦Â¦ 
+Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦Â¦  Â¦Â¦    Â¦Â¦ Â¦Â¦Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦Â¦  
+     Â¦Â¦ Â¦Â¦      Â¦Â¦   Â¦Â¦  Â¦Â¦  Â¦Â¦  Â¦Â¦      Â¦Â¦   Â¦Â¦ 
+Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦   Â¦Â¦   Â¦Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦Â¦Â¦ Â¦Â¦   Â¦Â¦                                           
 
 prod dependencies: {
     @mattermost/client      : https://www.npmjs.com/package/@mattermost/client
@@ -101,8 +101,8 @@ const Logger = require('./Logger');
 const Validator = require('./Validator');
 const RoomPassword = require('./RoomPassword');
 const HtmlInjector = require('./HtmlInjector');
-const { initSyncroom } = require('./Syncroom');
-const { getSessionUser } = require('./Syncroom/session');
+const { initSyncroom } = require('./syncroom');
+const { getSessionUser } = require('./syncroom/session');
 const log = new Logger('Server');
 
 function requireSyncroomLogin(req, res) {
@@ -184,7 +184,7 @@ const scheduleMeetingLimiter = rateLimit({
     keyGenerator: getRequesterKey,
 });
 
-// Active rooms endpoint rate limiter (per IP) — public endpoint, so prevent
+// Active rooms endpoint rate limiter (per IP) Â— public endpoint, so prevent
 // enumeration / scraping abuse without breaking the public "event zone" UX.
 const activeRoomsLimiterCfg = config.ui?.rooms?.activeRoomsRateLimit || {};
 const activeRoomsLimiterWindowMs = activeRoomsLimiterCfg.windowMs || 60 * 1000;
@@ -219,7 +219,7 @@ const recSyncLimiter = rateLimit({
     keyGenerator: (req) => ipKeyGenerator(req),
 });
 
-// Socket.IO createRoom rate limiter (per IP) — sliding window in memory.
+// Socket.IO createRoom rate limiter (per IP) Â— sliding window in memory.
 // Prevents unauthenticated sockets from spamming arbitrary room entries
 // into the in-memory roomList (which feeds /api/v1/activeRooms).
 const createRoomLimiterCfg = config.features?.createRoomRateLimit || {};
@@ -950,7 +950,7 @@ function startServer() {
         res.status(200).json({ message: config?.ui?.themes ? config.ui.themes : false });
     });
 
-    // main page — signed-in Syncroom users go straight to dashboard
+    // main page Â— signed-in Syncroom users go straight to dashboard
     app.get('/', OIDCAuth, (req, res) => {
         //log.debug('/ - hostCfg ----->', hostCfg);
         if (config?.ui?.brand?.syncroom?.enabled !== false && getSessionUser(req)) {
@@ -2363,11 +2363,11 @@ function startServer() {
             log.log(
                 `%c
     
-        ¦¦¦¦¦¦¦+¦¦+ ¦¦¦¦¦¦+ ¦¦¦+   ¦¦+      ¦¦¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦+ ¦¦+   ¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦¦+ 
-        ¦¦+----+¦¦¦¦¦+----+ ¦¦¦¦+  ¦¦¦      ¦¦+----+¦¦+----+¦¦+--¦¦+¦¦¦   ¦¦¦¦¦+----+¦¦+--¦¦+
-        ¦¦¦¦¦¦¦+¦¦¦¦¦¦  ¦¦¦+¦¦+¦¦+ ¦¦¦¦¦¦¦¦+¦¦¦¦¦¦¦+¦¦¦¦¦+  ¦¦¦¦¦¦++¦¦¦   ¦¦¦¦¦¦¦¦+  ¦¦¦¦¦¦++
-        +----¦¦¦¦¦¦¦¦¦   ¦¦¦¦¦¦+¦¦+¦¦¦+----++----¦¦¦¦¦+--+  ¦¦+--¦¦++¦¦+ ¦¦++¦¦+--+  ¦¦+--¦¦+
-        ¦¦¦¦¦¦¦¦¦¦¦+¦¦¦¦¦¦++¦¦¦ +¦¦¦¦¦      ¦¦¦¦¦¦¦¦¦¦¦¦¦¦¦+¦¦¦  ¦¦¦ +¦¦¦¦++ ¦¦¦¦¦¦¦+¦¦¦  ¦¦¦
+        Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦+ Â¦Â¦Â¦Â¦Â¦Â¦+ Â¦Â¦Â¦+   Â¦Â¦+      Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦+ Â¦Â¦+   Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦+ 
+        Â¦Â¦+----+Â¦Â¦Â¦Â¦Â¦+----+ Â¦Â¦Â¦Â¦+  Â¦Â¦Â¦      Â¦Â¦+----+Â¦Â¦+----+Â¦Â¦+--Â¦Â¦+Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦+----+Â¦Â¦+--Â¦Â¦+
+        Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦  Â¦Â¦Â¦+Â¦Â¦+Â¦Â¦+ Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦+  Â¦Â¦Â¦Â¦Â¦Â¦++Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦+  Â¦Â¦Â¦Â¦Â¦Â¦++
+        +----Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦   Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦+Â¦Â¦Â¦+----++----Â¦Â¦Â¦Â¦Â¦+--+  Â¦Â¦+--Â¦Â¦++Â¦Â¦+ Â¦Â¦++Â¦Â¦+--+  Â¦Â¦+--Â¦Â¦+
+        Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦Â¦Â¦Â¦++Â¦Â¦Â¦ +Â¦Â¦Â¦Â¦Â¦      Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦  Â¦Â¦Â¦ +Â¦Â¦Â¦Â¦++ Â¦Â¦Â¦Â¦Â¦Â¦Â¦+Â¦Â¦Â¦  Â¦Â¦Â¦
         +------++-+ +-----+ +-+  +---+      +------++------++-+  +-+  +---+  +------++-+  +-+ started...
     
         `,
@@ -4112,7 +4112,7 @@ function startServer() {
 
             // Security: strip fabric `image` objects whose `src` is not a safe http(s) URL
             // or `data:image/*` URI. This prevents SSRF probes (http://127.0.0.1, AWS IMDS,
-            // 192.168/10/172.16/8 ranges…) and dangerous schemes (javascript:, file:, blob:)
+            // 192.168/10/172.16/8 rangesÂ…) and dangerous schemes (javascript:, file:, blob:)
             // from being rendered by every other peer's browser.
             const sanitized = Validator.sanitizeWbCanvasJson(data, ({ src }) => {
                 log.debug('wbCanvasToJson dropped unsafe image src', { src });
@@ -4600,7 +4600,7 @@ function startServer() {
 
             const room = getRoom(socket);
 
-            // Resolve sender from server-side state — never trust client-supplied identity
+            // Resolve sender from server-side state Â— never trust client-supplied identity
             const peer = room.getPeer(socket.id);
             if (!peer) return;
 
@@ -5740,7 +5740,7 @@ function startServer() {
 
     function isPeerPresenter(room_id, peer_id, peer_name, peer_uuid) {
         try {
-            // 1. Direct lookup by peer_id (server-assigned socket.id — not user-controlled)
+            // 1. Direct lookup by peer_id (server-assigned socket.id Â— not user-controlled)
             const storedPresenter = presenters[room_id]?.[peer_id];
             if (storedPresenter) {
                 const isPresenter =
