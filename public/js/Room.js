@@ -5004,8 +5004,8 @@ function handleRoomClientEvents() {
 // ####################################################
 
 function initLeaveMeeting() {
-    if (!rc) return openURL('/newroom');
-    return completeRoomExit(false, false, '/newroom');
+    if (!rc) return openURL('/dashboard');
+    return completeRoomExit(false, false, '/dashboard');
 }
 
 async function leaveRoom(allowCancel = true, disconnectAll = false) {
@@ -5095,7 +5095,7 @@ function redirectOnLeave(disconnectAll = false) {
     endRoomSession();
     rc.exitRoom(disconnectAll);
 
-    const url = new URL(redirect && redirect.enabled ? redirect.url : '/newroom', window.location.href).href;
+    const url = new URL(redirect && redirect.enabled ? redirect.url : '/dashboard', window.location.href).href;
     const target = isEmbedded
         ? window.parent
         : getQueryParam('mirotalk_widget') === '1' && window.opener && !window.opener.closed
